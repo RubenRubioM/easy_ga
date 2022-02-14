@@ -49,29 +49,14 @@ impl Gene for MyGene {
 
 fn main() {
     let genetic_algorithm = GeneticAlgorithm::<MyGene>::new()
-                                                        .iterations(100000)
+                                                        .iterations(1000)
                                                         .mutation_rate(0.10)
                                                         .selection_rate(0.90)
                                                         .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(10)))
                                                         .init().unwrap();
 
 
-    let (gene, stop) = genetic_algorithm.run();
+    genetic_algorithm.run();
 
-    println!("Gene with fitness {} stopped because of {:?}", gene.get_fitness(), stop);
-
-    let mut genetic_algorithm2 = GeneticAlgorithm::<MyGene>::new()
-                                                        .iterations(100000)
-                                                        .mutation_rate(0.10)
-                                                        .selection_rate(0.90)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(10)))
-                                                        .init().unwrap();
-
-    while genetic_algorithm2.is_running() {
-        genetic_algorithm2.next_iteration();
-    }
-
-    println!("{:?}", genetic_algorithm2.get_stop_criteria());
-
-    println!("Hello easy_ga");
+    println!("Easy_GA");
 }

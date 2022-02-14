@@ -1,7 +1,6 @@
 //! This module define the trait and implementation of selection algorithms
 
-use std::{collections::HashSet};
-
+use std::collections::HashSet;
 use rand::Rng;
 
 pub trait Selection {
@@ -35,6 +34,7 @@ impl Selection for SelectionAlgorithms {
 
         match self {
             SelectionAlgorithms::Roulette(sections) => {
+                // TODO: Implement roulette algorithm.
                 todo!();
             }
 

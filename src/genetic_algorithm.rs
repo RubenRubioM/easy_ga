@@ -17,7 +17,7 @@ const MUTATION_RATE_DEFAULT: f32 = 0.05;
 const SELECTION_RATE_DEFAULT: f32 = 0.90;
 
 /// Reasons to stop the algorithm.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum StopCriteria {
     MaxIterations,
     FitnessAchieved,
@@ -229,16 +229,14 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     /// 
     /// If the population size is greather than the actual size, the generation ir resized filling the empty values with new genes of value `T`.
     pub fn population_size(mut self, population_size: usize) -> Self {
-        self.population_size = population_size;
-
+        
         if population_size >= self.population_size {
-            // TEST: Need testing.
+            // TODO: Need testing.
             self.generation.extend((0..population_size - self.generation.len()).map(|_| T::init()));
-            // self.generation.resize(population_size, T::init());
         } else {
-            // TODO: What should be the politic if the new size is lower?
-            todo!();
+            self.generation.resize(population_size, T::init());
         }
+        self.population_size = population_size;
         self
     }
 
@@ -248,12 +246,11 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     /// 
     /// If the max number passed is lower than the current generation, the algorithm will end.
     pub fn iterations(mut self, iterations: u32) -> Self {
-        self.iterations = iterations;
-
         if iterations <= self.current_iteration {
             panic!("Number of iterations is not greater  than the actual iteration.");
         }
 
+        self.iterations = iterations;
         self
     }
 
@@ -289,20 +286,49 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         self
     }
 
+    /// Returns the population size.
+    pub fn get_population_size(&self) -> usize {
+        self.population_size
+    }
+
+    /// Returns the max iterations.
+    pub fn get_iterations(&self) -> u32 {
+        self.iterations
+    }
+
     /// Returns the current iteration.
     pub fn get_current_iteration(&self) -> u32 {
         self.current_iteration
     }
 
+    /// Returns the current generation.
+    pub fn get_generation(&self) -> Vec<T> {
+        self.generation.clone()
+    }
+
     /// Returns all the generations the algorithm passed.
-    pub fn get_generation_historic(&self) -> &Vec<Vec<T>> {
-        &self.generation_historic
+    pub fn get_generation_historic(&self) -> Vec<Vec<T>> {
+        self.generation_historic.clone()
 
     }
 
+    /// Returns the mutation rate.
+    pub fn get_mutation_rate(&self) -> f32 {
+        self.mutation_rate
+    }
+
+    /// Returns the selection rate.
+    pub fn get_selection_rate(&self) -> f32 {
+        self.selection_rate
+    }
+
+    pub fn get_fitness_goal(&self) -> f64 {
+        self.fitness_goal
+    }
+
     /// Returns the best gene in all the generations.
-    pub fn get_best_gene(&self) -> &T {
-        &self.best_gene
+    pub fn get_best_gene(&self) -> T {
+        self.best_gene.clone()
     }
 
     /// Returns if the algorithm is currently running
