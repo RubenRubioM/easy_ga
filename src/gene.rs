@@ -1,7 +1,5 @@
 //! This module contains the definition of a Gene trait.
 
-use std::error::Error;
-
 /// This trait defines how a Gene has to be implemented.
 pub trait Gene {
     /// Initialize the parameters of the gene. It is used inside the `easy_ga::GeneticAlgorithm`.
@@ -30,11 +28,7 @@ pub trait Gene {
     fn crossover(&self, other: &Self) -> Self;
 
     /// Mutates the gene to alter its values.
-    /// 
-    /// # Returns
-    /// 
-    /// * `self` as `Gene` - Returns itself to perform chain calling.
-    fn mutate(&mut self) -> Result<(), Box<dyn Error>>;
+    fn mutate(&mut self);
 
     /// Returns the fitness of the gene to avoid calculate it everytime we want to check the value.
     /// 

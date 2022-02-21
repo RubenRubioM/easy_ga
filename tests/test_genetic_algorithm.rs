@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 #[cfg(test)]
 mod test {
     use easy_ga::GeneticAlgorithm;
@@ -5,7 +7,6 @@ mod test {
     use easy_ga::SelectionAlgorithms;
     use easy_ga::genetic_algorithm::StopCriteria;
 
-    use std::error::Error;
     use rand::Rng;
 
     #[derive(Clone, Copy, Default)]
@@ -33,11 +34,10 @@ mod test {
             other.clone()
         }
 
-        fn mutate(&mut self) -> Result<(), Box<dyn Error>> {
+        fn mutate(&mut self) {
             let mut rng = rand::thread_rng();
             self.x = rng.gen_range(0.0..100.0);
             self.y = rng.gen_range(0..100);
-            Ok(())
         }
 
         fn get_fitness(&self) -> f64 {
@@ -46,7 +46,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenNew_ThenEveryVariableIsInitializedSuccesfully() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
 
@@ -60,7 +59,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenNewWithValues_ThenEveryVariableIsInitializedSuccesfully() {
         let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) = (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new_with_values(
@@ -78,7 +76,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenNewSettingValues_ThenEveryVariableIsInitializedSuccesfully() {
         let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) = (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
@@ -98,7 +95,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenSetPopulationSize_ThenSuccess() {
         let mut genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         let population_size_extend = 1000_usize;
@@ -112,7 +108,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenSetIterations_ThenSuccess() {
         let mut genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         let iterations_add = 1000;
@@ -126,7 +121,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenSetFitnessGoal_ThenSuccess() {
         let mut genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         let fitness_goal = 1000.0;
@@ -137,7 +131,6 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenSetMutationRateWithCorrectValues_ThenSuccess() {
         let mut genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         let mutation_rate = 0.20;
@@ -148,7 +141,6 @@ mod test {
 
     #[test]
     #[should_panic]
-    #[allow(non_snake_case)]
     fn WhenSetMutationRateWithOverflowValue_ThenPanic() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         genetic_algorithm.mutation_rate(1.10);
@@ -156,7 +148,6 @@ mod test {
 
     #[test]
     #[should_panic]
-    #[allow(non_snake_case)]
     fn WhenSetMutationRateWithUnderflowValue_ThenPanic() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         genetic_algorithm.mutation_rate(-0.10);
@@ -164,7 +155,6 @@ mod test {
 
     #[test]
     #[should_panic]
-    #[allow(non_snake_case)]
     fn WhenSetSelectionRateWithOverflowValue_ThenPanic() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         genetic_algorithm.selection_rate(1.10);
@@ -172,14 +162,12 @@ mod test {
 
     #[test]
     #[should_panic]
-    #[allow(non_snake_case)]
     fn WhenSetSelectionRateWithUnderflowValue_ThenPanic() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
         genetic_algorithm.selection_rate(-0.10);
     }
 
     #[test]
-    #[allow(non_snake_case)]
     fn WhenInit_ThenSuccess() {
         let mut genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new();
 
@@ -189,9 +177,60 @@ mod test {
     }
 
     #[test]
-    #[allow(non_snake_case)]
-    fn WhenRun_ThenSuccess() {
+    fn WhenRun_ThenReachMaxIterations() {
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new().init().unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::MaxIterations);
+    }
+
+    #[test]
+    fn WhenRun_ThenReachFitnessGoal() {
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new().fitness_goal(10.0).init().unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::FitnessAchieved);
+    }
+
+    #[test]
+    fn WhenRunWithDifferentSelectionAlgorithm_ThenSuccess() {
+        let iterations = 10;
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+                                                        .iterations(iterations)
+                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Roulette))
+                                                        .init().unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::MaxIterations);
+
+        let population_size = 100;
+
+        // Test Tournament(1)
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+                                                        .iterations(iterations)
+                                                        .population_size(population_size)
+                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(1)))
+                                                        .init().unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::MaxIterations);
+        
+        // Test Tournament(half population)
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+                                                        .iterations(iterations)
+                                                        .population_size(population_size)
+                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(population_size / 2)))
+                                                        .init().unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::MaxIterations);
+
+        // Test Tournament(population_size)
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+                                                        .iterations(iterations)
+                                                        .population_size(population_size)
+                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(population_size)))
+                                                        .init().unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::MaxIterations);

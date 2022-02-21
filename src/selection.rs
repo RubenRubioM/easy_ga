@@ -2,6 +2,8 @@
 
 use std::collections::HashSet;
 use rand::Rng;
+use rand::distributions::Standard;
+use std::cmp;
 
 pub trait Selection {
     /// Select the gene index to pass to the next generation.
@@ -23,26 +25,42 @@ pub trait Selection {
 }
 
 pub enum SelectionAlgorithms {
-    Roulette(usize),
+    Roulette,
     Tournament(usize),
 }
 
 impl Selection for SelectionAlgorithms {
+    //FIXME: This should return a vector and not an index because this way we avoid a lot of calculations
     fn select(&self, fitnesses: Vec<f64>) -> usize {
         let mut rng = rand::thread_rng();
         let mut winner_idx: usize = 0;
 
         match self {
-            SelectionAlgorithms::Roulette(sections) => {
-                // TODO: Implement roulette algorithm.
-                todo!();
+            SelectionAlgorithms::Roulette => {
+                let total_fitness: f64 = fitnesses.iter().sum();
+                let mut probabilities: Vec<f64> = Vec::with_capacity(fitnesses.len());
+
+                for fitness_value in fitnesses.iter() {
+                    probabilities.push(fitness_value / total_fitness);
+                }
+
+                let value: f64 = rng.sample(Standard);
+                let mut fitness_accum = 0.0;
+
+                for (idx, probability) in probabilities.iter().enumerate() {
+                    if value <= fitness_accum + probability {
+                        return idx
+                    }
+                    fitness_accum += probability;
+                }
             }
 
             SelectionAlgorithms::Tournament(members) => {
                 // We use a HashSet to avoid duplicated values.
-                let mut set: HashSet<usize> = HashSet::with_capacity(*members);
+                let tournament_size = cmp::min(*members, fitnesses.len());
+                let mut set: HashSet<usize> = HashSet::with_capacity(tournament_size); // In case the population is lower than the number of members.
 
-                while set.len() < *members {
+                while set.len() < tournament_size {
                     let idx = rng.gen_range(0..fitnesses.len());
                     set.insert(idx);
                 }

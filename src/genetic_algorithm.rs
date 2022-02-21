@@ -103,7 +103,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         }
 
         let generation = (0..population_size).map(|_| T::init()).collect();
-        let generation_historic = vec![Vec::clone(&generation)];
+        let generation_historic= vec![vec![]];
 
         GeneticAlgorithm {
             population_size,
@@ -125,6 +125,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     /// Initiate the algorithm.    
     pub fn init(mut self) -> Result<Self, Box<dyn Error>>{
         self.running = true;
+        self.save_generation();
         Ok(self)
     }
     
@@ -168,18 +169,22 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
         // Crossover
         let mut rng = rand::thread_rng();
-        
-        // TODO: Check if we don't select the same gen.
         while new_genes_num < self.population_size {
-            let gen1 = new_generation[rng.gen_range(0..new_generation.len())];
-            new_generation.push(gen1.crossover(&new_generation[rng.gen_range(0..new_generation.len())]));
+            let gen1_idx = rng.gen_range(0..new_generation.len());
+            let mut gen2_idx = gen1_idx;
+            while gen2_idx == gen1_idx {
+                gen2_idx = rng.gen_range(0..new_generation.len());
+            }
+            let gen1 = new_generation[gen1_idx];
+            let crossover_gen = gen1.crossover(&new_generation[gen2_idx]);
+            new_generation.push(crossover_gen);
             new_genes_num += 1;
         }
         
         // Mutation
         for gen in new_generation.iter_mut() {
             if rng.gen_range(0.0..1.0) < self.mutation_rate{
-                gen.mutate().unwrap();
+                gen.mutate();
             }
         }
         
@@ -231,7 +236,6 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     pub fn population_size(mut self, population_size: usize) -> Self {
         
         if population_size >= self.population_size {
-            // TODO: Need testing.
             self.generation.extend((0..population_size - self.generation.len()).map(|_| T::init()));
         } else {
             self.generation.resize(population_size, T::init());
@@ -309,7 +313,6 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     /// Returns all the generations the algorithm passed.
     pub fn get_generation_historic(&self) -> Vec<Vec<T>> {
         self.generation_historic.clone()
-
     }
 
     /// Returns the mutation rate.
