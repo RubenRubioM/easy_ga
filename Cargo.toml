@@ -5,8 +5,9 @@ edition = "2021"
 authors = ["RubenRubioM"]
 description = "This a library to implement genetic algorithms"
 readme = "README.md"
+license-file = "LICENSE.txt"
 repository = "https://github.com/RubenRubioM/easy_ga/"
-keywords = ["genetic algorithm", "genetics", "ai", "machine learning"]
+keywords = ["genetic", "genetics", "genetic-algorithm", "ai", "machine-learning"]
 categories = ["science"]
 exclude = ["main.rs"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
