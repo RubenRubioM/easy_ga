@@ -1,6 +1,6 @@
 [package]
 name = "easy_ga"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["RubenRubioM"]
 description = "This a library to implement genetic algorithms"
