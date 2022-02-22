@@ -1,10 +1,11 @@
 [package]
 name = "easy_ga"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 authors = ["RubenRubioM"]
 description = "Library to implement genetic algorithms"
 readme = "README.md"
+license = "MPL-2.0"
 license-file = "LICENSE.txt"
 repository = "https://github.com/RubenRubioM/easy_ga/"
 keywords = ["genetic", "genetics", "genetic-algorithm", "ai", "machine-learning"]
