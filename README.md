@@ -104,6 +104,7 @@ This is a personal side project mainly for me so any further implementations wil
 - New default `Selection` algorithms
 - CSV and JSON result export
 - Fix some quality of life problems with references and chain calling
+- Add benchmarks
 
 ## License
 
