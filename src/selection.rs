@@ -1,23 +1,23 @@
 //! This module define the trait and implementation of selection algorithms
 
-use std::collections::HashSet;
-use rand::Rng;
 use rand::distributions::Standard;
+use rand::Rng;
 use std::cmp;
+use std::collections::HashSet;
 
 pub trait Selection {
     /// Select the gene index to pass to the next generation.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `fitnesses` as `&Vec<f64>` - Vector with the fitnesses values of our generation.
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// * `index` as `usize` - The index in our generation array to avance to the next generation.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// let v: Vec<f64> = [10.5, 20.0, 100.0];
     /// let idx: usize = Selection::select(&v);
     /// println!("Value {} is selected", v[idx]);
@@ -49,7 +49,7 @@ impl Selection for SelectionAlgorithms {
 
                 for (idx, probability) in probabilities.iter().enumerate() {
                     if value <= fitness_accum + probability {
-                        return idx
+                        return idx;
                     }
                     fitness_accum += probability;
                 }
@@ -72,7 +72,6 @@ impl Selection for SelectionAlgorithms {
                         winner_idx = idx;
                     }
                 }
-
             }
         }
 

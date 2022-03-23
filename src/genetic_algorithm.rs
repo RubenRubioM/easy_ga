@@ -1,11 +1,11 @@
 //! This module contains the definition and implementation of the GeneticAlgorithm class
 //! wich is the handler for our `Gene` to do the logic.
 
-use std::error::Error;
 use rand::Rng;
+use std::error::Error;
 
-use crate::Gene;
 use crate::selection::*;
+use crate::Gene;
 
 /// Default value for our population size.
 const POPULATION_SIZE_DEFAULT: usize = 100;
@@ -39,7 +39,7 @@ pub struct GeneticAlgorithm<T: Gene + Copy> {
     /// The mutation percentage.
     mutation_rate: f32,
     /// The percentage of individuals to survive to the next generation.
-    /// 
+    ///
     /// # Example
     /// If we have a `population_size` of 100 genes and a `selection_rate` of 0.9. Then, 90 genes will advance to the new generation and 10 will be generated via crossover.
     selection_rate: f32,
@@ -84,26 +84,33 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     }
 
     /// Creates a new `GeneticAlgorithm` with specific values.
-    /// 
+    ///
     /// # Arguments
-    /// 
+    ///
     /// * `population_size` - The population of the generation.
     /// * `iterations` - The number of max iterations.
     /// * `mutation_rate` - The mutation probability for a gene.
     /// * `selection_rate` - The percentage of individuals to survive to the next generation.
     /// * `selection_algorithm` - Box object with a Selection trait to perform the selection algorithm.
     /// * `fitness_goal` - The fitness value target.
-    pub fn new_with_values(population_size: usize, iterations: u32, mutation_rate: f32, selection_rate: f32, selection_algorithm: Box<dyn Selection>, fitness_goal: f64) -> Self {
+    pub fn new_with_values(
+        population_size: usize,
+        iterations: u32,
+        mutation_rate: f32,
+        selection_rate: f32,
+        selection_algorithm: Box<dyn Selection>,
+        fitness_goal: f64,
+    ) -> Self {
         if mutation_rate > 1.0 || mutation_rate < 0.0 {
             panic!("Mutation rate not in rage between 0.0 and 1.0");
         }
-        
+
         if selection_rate > 1.0 || selection_rate < 0.0 {
             panic!("Selection rate not in rage between 0.0 and 1.0");
         }
 
         let generation = (0..population_size).map(|_| T::init()).collect();
-        let generation_historic= vec![vec![]];
+        let generation_historic = vec![vec![]];
 
         GeneticAlgorithm {
             population_size,
@@ -123,12 +130,12 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
     // TODO: Implement error handling when the algorithm will not be able to init.
     /// Initiate the algorithm.    
-    pub fn init(mut self) -> Result<Self, Box<dyn Error>>{
+    pub fn init(mut self) -> Result<Self, Box<dyn Error>> {
         self.running = true;
         self.save_generation();
         Ok(self)
     }
-    
+
     /// Runs the algorithm by itself without user control.
     pub fn run(mut self) -> (T, StopCriteria) {
         self = self.init().unwrap();
@@ -136,14 +143,14 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         while self.running {
             self.next_iteration();
         }
-        
+
         (self.best_gene, self.stop_criteria)
     }
 
     /// Goes iteration by iteration in case the user wants to have more control over the lifetime of the algorithm.
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// `self.generation` - The new generation.
     pub fn next_iteration(&mut self) -> &Vec<T> {
         // Calculate fitness.
@@ -157,10 +164,11 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         let mut new_genes_num: usize = 0;
 
         while new_genes_num < num_survivors {
-            let gene_idx: usize = self.selection_algorithm.select(self.generation
-                .iter()
-                .map(|gene| gene.get_fitness())
-                .collect()
+            let gene_idx: usize = self.selection_algorithm.select(
+                self.generation
+                    .iter()
+                    .map(|gene| gene.get_fitness())
+                    .collect(),
             );
             new_generation.push(self.generation[gene_idx]);
             self.generation.remove(gene_idx);
@@ -180,18 +188,18 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
             new_generation.push(crossover_gen);
             new_genes_num += 1;
         }
-        
+
         // Mutation
         for gen in new_generation.iter_mut() {
-            if rng.gen_range(0.0..1.0) < self.mutation_rate{
+            if rng.gen_range(0.0..1.0) < self.mutation_rate {
                 gen.mutate();
             }
         }
-        
+
         // Save generation_historic & best_gene
         self.generation = new_generation;
         self.save_generation();
-        
+
         self.current_iteration += 1;
 
         // Check stop criteria
@@ -199,11 +207,11 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
         &self.generation
     }
-    
+
     /// Saves the generation just created and the best gene.
     fn save_generation(&mut self) {
         self.generation_historic.push(Vec::clone(&self.generation));
-        
+
         let mut best_fitness: f64 = self.best_gene.get_fitness();
 
         // FIXME: Not use clone, since it is expensive?
@@ -229,14 +237,14 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     }
 
     /// Sets the population size.
-    /// 
+    ///
     /// # Notes
-    /// 
+    ///
     /// If the population size is greather than the actual size, the generation ir resized filling the empty values with new genes of value `T`.
     pub fn population_size(mut self, population_size: usize) -> Self {
-        
         if population_size >= self.population_size {
-            self.generation.extend((0..population_size - self.generation.len()).map(|_| T::init()));
+            self.generation
+                .extend((0..population_size - self.generation.len()).map(|_| T::init()));
         } else {
             self.generation.resize(population_size, T::init());
         }
@@ -245,9 +253,9 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     }
 
     /// Sets the max number of iterations the algorithm will perform.
-    /// 
+    ///
     /// # Notes
-    /// 
+    ///
     /// If the max number passed is lower than the current generation, the algorithm will end.
     pub fn iterations(mut self, iterations: u32) -> Self {
         if iterations <= self.current_iteration {

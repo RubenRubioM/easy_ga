@@ -25,7 +25,6 @@ impl Gene for MyGene {
         self.fitness
     }
 
-
     // TODO: Implement good crossover.
     fn crossover(&self, other: &Self) -> Self {
         other.clone()
@@ -43,19 +42,23 @@ impl Gene for MyGene {
     }
 }
 
-
 fn main() {
     let genetic_algorithm = GeneticAlgorithm::<MyGene>::new()
-                                                        .population_size(20)
-                                                        .iterations(50)
-                                                        .mutation_rate(0.10)
-                                                        .selection_rate(0.90)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(10)))
-                                                        .fitness_goal(100.0)
-                                                        .init().unwrap();
+        .population_size(20)
+        .iterations(50)
+        .mutation_rate(0.10)
+        .selection_rate(0.90)
+        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(10)))
+        .fitness_goal(100.0)
+        .init()
+        .unwrap();
 
     let (gene, stop) = genetic_algorithm.run();
 
-    println!("Best gene stopped because {:?} with {}", stop, gene.get_fitness());
+    println!(
+        "Best gene stopped because {:?} with {}",
+        stop,
+        gene.get_fitness()
+    );
     println!("Easy_GA");
 }

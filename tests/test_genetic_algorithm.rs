@@ -1,11 +1,11 @@
 #![allow(non_snake_case)]
 
 #[cfg(test)]
-mod test {
-    use easy_ga::GeneticAlgorithm;
-    use easy_ga::Gene;
-    use easy_ga::SelectionAlgorithms;
+mod genetic_algorithm {
     use easy_ga::genetic_algorithm::StopCriteria;
+    use easy_ga::Gene;
+    use easy_ga::GeneticAlgorithm;
+    use easy_ga::SelectionAlgorithms;
 
     use rand::Rng;
 
@@ -60,30 +60,36 @@ mod test {
 
     #[test]
     fn WhenNewWithValues_ThenEveryVariableIsInitializedSuccesfully() {
-        let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) = (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
+        let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) =
+            (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new_with_values(
-                                                            population_size, iterations, mutation_rate, selection_rate, 
-                                                            Box::new(SelectionAlgorithms::Tournament(10)),fitness_goal
-                                                            );
-        
+            population_size,
+            iterations,
+            mutation_rate,
+            selection_rate,
+            Box::new(SelectionAlgorithms::Tournament(10)),
+            fitness_goal,
+        );
+
         assert_eq!(genetic_algorithm.get_population_size(), population_size);
         assert_eq!(genetic_algorithm.get_iterations(), iterations);
         assert_eq!(genetic_algorithm.get_current_iteration(), 0);
         assert_eq!(genetic_algorithm.get_mutation_rate(), mutation_rate);
         assert_eq!(genetic_algorithm.get_selection_rate(), selection_rate);
         assert_eq!(genetic_algorithm.get_fitness_goal(), fitness_goal);
-        assert_eq!(genetic_algorithm.is_running(), false);                                                
+        assert_eq!(genetic_algorithm.is_running(), false);
     }
 
     #[test]
     fn WhenNewSettingValues_ThenEveryVariableIsInitializedSuccesfully() {
-        let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) = (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
+        let (population_size, iterations, mutation_rate, selection_rate, fitness_goal) =
+            (50_usize, 10000_u32, 0.10_f32, 0.80_f32, 1000_f64);
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
-                                                        .population_size(population_size)
-                                                        .iterations(iterations)
-                                                        .mutation_rate(mutation_rate)
-                                                        .selection_rate(selection_rate)
-                                                        .fitness_goal(fitness_goal);
+            .population_size(population_size)
+            .iterations(iterations)
+            .mutation_rate(mutation_rate)
+            .selection_rate(selection_rate)
+            .fitness_goal(fitness_goal);
 
         assert_eq!(genetic_algorithm.get_population_size(), population_size);
         assert_eq!(genetic_algorithm.get_iterations(), iterations);
@@ -91,7 +97,7 @@ mod test {
         assert_eq!(genetic_algorithm.get_mutation_rate(), mutation_rate);
         assert_eq!(genetic_algorithm.get_selection_rate(), selection_rate);
         assert_eq!(genetic_algorithm.get_fitness_goal(), fitness_goal);
-        assert_eq!(genetic_algorithm.is_running(), false);  
+        assert_eq!(genetic_algorithm.is_running(), false);
     }
 
     #[test]
@@ -101,10 +107,16 @@ mod test {
         let population_size_reduce = 10_usize;
 
         genetic_algorithm = genetic_algorithm.population_size(population_size_extend);
-        assert_eq!(genetic_algorithm.get_population_size(), population_size_extend);
+        assert_eq!(
+            genetic_algorithm.get_population_size(),
+            population_size_extend
+        );
 
         genetic_algorithm = genetic_algorithm.population_size(population_size_reduce);
-        assert_eq!(genetic_algorithm.get_population_size(), population_size_reduce);
+        assert_eq!(
+            genetic_algorithm.get_population_size(),
+            population_size_reduce
+        );
     }
 
     #[test]
@@ -127,7 +139,6 @@ mod test {
 
         genetic_algorithm = genetic_algorithm.fitness_goal(fitness_goal);
         assert_eq!(genetic_algorithm.get_fitness_goal(), fitness_goal);
-
     }
 
     #[test]
@@ -173,7 +184,7 @@ mod test {
 
         assert_eq!(genetic_algorithm.is_running(), false);
         genetic_algorithm = genetic_algorithm.init().unwrap();
-        assert_eq!(genetic_algorithm.is_running(), true);  
+        assert_eq!(genetic_algorithm.is_running(), true);
     }
 
     #[test]
@@ -186,7 +197,10 @@ mod test {
 
     #[test]
     fn WhenRun_ThenReachFitnessGoal() {
-        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new().fitness_goal(10.0).init().unwrap();
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+            .fitness_goal(10.0)
+            .init()
+            .unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::FitnessAchieved);
@@ -196,9 +210,10 @@ mod test {
     fn WhenRunWithDifferentSelectionAlgorithm_ThenSuccess() {
         let iterations = 10;
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
-                                                        .iterations(iterations)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Roulette))
-                                                        .init().unwrap();
+            .iterations(iterations)
+            .selection_algorithm(Box::new(SelectionAlgorithms::Roulette))
+            .init()
+            .unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::MaxIterations);
@@ -207,30 +222,35 @@ mod test {
 
         // Test Tournament(1)
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
-                                                        .iterations(iterations)
-                                                        .population_size(population_size)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(1)))
-                                                        .init().unwrap();
+            .iterations(iterations)
+            .population_size(population_size)
+            .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(1)))
+            .init()
+            .unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::MaxIterations);
-        
+
         // Test Tournament(half population)
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
-                                                        .iterations(iterations)
-                                                        .population_size(population_size)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(population_size / 2)))
-                                                        .init().unwrap();
+            .iterations(iterations)
+            .population_size(population_size)
+            .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(
+                population_size / 2,
+            )))
+            .init()
+            .unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::MaxIterations);
 
         // Test Tournament(population_size)
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
-                                                        .iterations(iterations)
-                                                        .population_size(population_size)
-                                                        .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(population_size)))
-                                                        .init().unwrap();
+            .iterations(iterations)
+            .population_size(population_size)
+            .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(population_size)))
+            .init()
+            .unwrap();
 
         let (_, stopCriteria) = genetic_algorithm.run();
         assert_eq!(stopCriteria, StopCriteria::MaxIterations);
