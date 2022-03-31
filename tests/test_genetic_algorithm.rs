@@ -3,47 +3,9 @@
 #[cfg(test)]
 mod genetic_algorithm {
     use easy_ga::genetic_algorithm::StopCriteria;
-    use easy_ga::Gene;
+    use easy_ga::samples::MyGene as MockMyGene;
     use easy_ga::GeneticAlgorithm;
     use easy_ga::SelectionAlgorithms;
-
-    use rand::Rng;
-
-    #[derive(Clone, Copy, Default)]
-    struct MockMyGene {
-        pub x: f64,
-        pub y: i32,
-        fitness: f64,
-    }
-
-    impl Gene for MockMyGene {
-        fn init() -> Self {
-            let mut rng = rand::thread_rng();
-            MockMyGene {
-                x: rng.gen_range(0.0..100.0),
-                y: rng.gen_range(0..100),
-                fitness: 0.0,
-            }
-        }
-        fn calculate_fitness(&mut self) -> f64 {
-            self.fitness = self.x + self.y as f64;
-            self.fitness
-        }
-
-        fn crossover(&self, other: &Self) -> Self {
-            other.clone()
-        }
-
-        fn mutate(&mut self) {
-            let mut rng = rand::thread_rng();
-            self.x = rng.gen_range(0.0..100.0);
-            self.y = rng.gen_range(0..100);
-        }
-
-        fn get_fitness(&self) -> f64 {
-            self.fitness
-        }
-    }
 
     #[test]
     fn WhenNew_ThenEveryVariableIsInitializedSuccesfully() {

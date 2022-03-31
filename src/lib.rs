@@ -2,6 +2,7 @@
 
 pub mod gene;
 pub mod genetic_algorithm;
+pub mod samples;
 pub mod selection;
 
 pub use gene::Gene;
