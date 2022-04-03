@@ -25,7 +25,7 @@ impl Gene for MyGene {
 
     // TODO: Implement good crossover.
     fn crossover(&self, other: &Self) -> Self {
-        other.clone()
+        *other
     }
 
     // TODO: Implement good mutate.

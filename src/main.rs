@@ -10,7 +10,7 @@ fn main() {
         .mutation_rate(0.10)
         .selection_rate(0.90)
         .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(10)))
-        .fitness_goal(100.0)
+        .fitness_goal(f64::MAX)
         .init()
         .unwrap();
 

@@ -165,7 +165,8 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
         while new_genes_num < num_survivors {
             let gene_idx: usize = self.selection_algorithm.select(
-                self.generation
+                &self
+                    .generation
                     .iter()
                     .map(|gene| gene.get_fitness())
                     .collect(),
@@ -217,7 +218,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         // FIXME: Not use clone, since it is expensive?
         for gene in self.generation.iter() {
             if gene.get_fitness() > best_fitness {
-                self.best_gene = gene.clone();
+                self.best_gene = *gene;
                 best_fitness = gene.get_fitness();
             }
         }
@@ -339,7 +340,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
     /// Returns the best gene in all the generations.
     pub fn get_best_gene(&self) -> T {
-        self.best_gene.clone()
+        self.best_gene
     }
 
     /// Returns if the algorithm is currently running
@@ -349,5 +350,11 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
     pub fn get_stop_criteria(&self) -> StopCriteria {
         self.stop_criteria
+    }
+}
+
+impl<T: Gene + Copy> Default for GeneticAlgorithm<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }

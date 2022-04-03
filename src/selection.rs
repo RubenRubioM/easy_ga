@@ -21,7 +21,7 @@ pub trait Selection {
     /// let v: Vec<f64> = [10.5, 20.0, 100.0];
     /// let idx: usize = Selection::select(&v);
     /// println!("Value {} is selected", v[idx]);
-    fn select(&self, fitnesses: Vec<f64>) -> usize;
+    fn select(&self, fitnesses: &Vec<f64>) -> usize;
 }
 
 pub enum SelectionAlgorithms {
@@ -31,7 +31,7 @@ pub enum SelectionAlgorithms {
 
 impl Selection for SelectionAlgorithms {
     //FIXME: This should return a vector and not an index because this way we avoid a lot of calculations
-    fn select(&self, fitnesses: Vec<f64>) -> usize {
+    fn select(&self, fitnesses: &Vec<f64>) -> usize {
         let mut rng = rand::thread_rng();
         let mut winner_idx: usize = 0;
 
