@@ -13,7 +13,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Roulette - size/50", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_50);
                 }
             })
@@ -24,7 +24,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Roulette - size/100", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_100);
                 }
             })
@@ -35,7 +35,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Roulette - size/250", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_250);
                 }
             })
@@ -46,7 +46,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Roulette - size/500", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -63,7 +63,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament - size/50", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_50);
                 }
             })
@@ -75,7 +75,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament - size/100", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_100);
                 }
             })
@@ -87,7 +87,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament - size/250", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_250);
                 }
             })
@@ -99,7 +99,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament - size/500", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -116,7 +116,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(2)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -126,7 +126,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(10)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -136,7 +136,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(50)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -146,7 +146,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(100)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -156,7 +156,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(250)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -166,7 +166,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(500)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -184,7 +184,7 @@ pub mod benchmark {
 
         group.bench_function("SelectionAlgorithms::Tournament(2)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -193,7 +193,7 @@ pub mod benchmark {
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
         group.bench_function("SelectionAlgorithms::Tournament(10)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -202,7 +202,7 @@ pub mod benchmark {
         let selection_algorithm = SelectionAlgorithms::Tournament(25);
         group.bench_function("SelectionAlgorithms::Tournament(25)", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
@@ -211,7 +211,7 @@ pub mod benchmark {
         let selection_algorithm = SelectionAlgorithms::Roulette;
         group.bench_function("SelectionAlgorithms::Roulette", |b| {
             b.iter(|| {
-                for _ in 0..10000 {
+                for _ in 0..100000 {
                     selection_algorithm.select(&fitnesses_500);
                 }
             })
