@@ -93,6 +93,35 @@ while genetic_algorithm.is_running() {
     let new_generation: &Vec<MyGene> = genetic_algorithm.next_iteration();
 }
 ```
+---
+## Logger
+
+The logger is a very usefull tool to measure and retrieve some data from the execution. By default the logger is disabled, you can enable it this way:
+
+```rust
+use easy_ga::VerbosityLevel; // Verbosity level {DISABLED, LOW, MID, HIGH}
+use easy_ga::VerbosityType; // Verbosity type {LOG, SAVE, LOG_AND_SAVE}
+use easy_ga::LOG_verbosity; // Sets the verbosity level.
+use easy_ga::LOG_verbosity_type; // Sets the verbosity type.
+
+LOG_verbosity(VerbosityLevel::LOW); // VerbosityLevel::DISABLED by default
+LOG_verbosity_type(VerbosityType::LOG_AND_SAVE); // VerbosityType::LOG by default
+```
+
+- **VerbosityLevel:**
+  - **DISABLED**: The logs are disabled.
+  - **LOW**: Only very usefull information.
+  - **MID**: Maybe not to desired information but also usefull.
+  - **HIGH**: All logs are avaliable including tracing logs.
+
+- **VerbosityType:**
+  - **LOG**: Only terminal logs.
+  - **SAVE**: Saves the logs into [target/tmp/](target/tmp/).
+  - **SAVE_AND_LOG**: Both.
+
+## Benchmarking
+
+Benchmarking was added in the version `1.1.0` and you can run them donwloading the repository and running `cargo bench` from the command-line. The benchmarks are placed inside the [benches/](benches/) folder. 
 
 ## Next steps
 

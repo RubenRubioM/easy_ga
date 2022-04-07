@@ -1,9 +1,11 @@
 //! This module contains the definition and implementation of the GeneticAlgorithm class
 //! wich is the handler for our `Gene` to do the logic.
 
+use core::fmt;
 use rand::Rng;
 use std::error::Error;
 
+use crate::logger;
 use crate::selection::*;
 use crate::Gene;
 
@@ -66,8 +68,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     pub fn new() -> Self {
         let generation = (0..POPULATION_SIZE_DEFAULT).map(|_| T::init()).collect();
         let generation_historic = vec![Vec::clone(&generation)];
-
-        GeneticAlgorithm {
+        let return_value = GeneticAlgorithm {
             population_size: POPULATION_SIZE_DEFAULT,
             iterations: MAX_ITERATIONS_DEFAULT,
             current_iteration: 0,
@@ -80,7 +81,18 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
             running: false,
             best_gene: T::init(),
             stop_criteria: StopCriteria::Unknown,
-        }
+        };
+
+        logger::LOG(
+            logger::VerbosityLevel::LOW,
+            format!(
+                "GeneticAlgorithm created with default values:\n{}",
+                return_value
+            )
+            .as_str(),
+        );
+
+        return_value
     }
 
     /// Creates a new `GeneticAlgorithm` with specific values.
@@ -111,8 +123,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
         let generation = (0..population_size).map(|_| T::init()).collect();
         let generation_historic = vec![vec![]];
-
-        GeneticAlgorithm {
+        let return_value = GeneticAlgorithm {
             population_size,
             iterations,
             current_iteration: 0,
@@ -125,7 +136,14 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
             running: false,
             best_gene: T::init(),
             stop_criteria: StopCriteria::Unknown,
-        }
+        };
+
+        logger::LOG(
+            logger::VerbosityLevel::LOW,
+            format!("GeneticAlgorithm created with values:\n{}", return_value).as_str(),
+        );
+
+        return_value
     }
 
     // TODO: Implement error handling when the algorithm will not be able to init.
@@ -133,12 +151,20 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     pub fn init(mut self) -> Result<Self, Box<dyn Error>> {
         self.running = true;
         self.save_generation();
+        logger::LOG(
+            logger::VerbosityLevel::HIGH,
+            "Algorithm initiated properlly.",
+        );
         Ok(self)
     }
 
     /// Runs the algorithm by itself without user control.
     pub fn run(mut self) -> (T, StopCriteria) {
-        self = self.init().unwrap();
+        if !self.is_running() {
+            self = self.init().unwrap();
+        }
+
+        logger::LOG(logger::VerbosityLevel::HIGH, "Algorithm run started.");
 
         while self.running {
             self.next_iteration();
@@ -153,16 +179,38 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     ///
     /// `self.generation` - The new generation.
     pub fn next_iteration(&mut self) -> &Vec<T> {
+        logger::LOG(
+            logger::VerbosityLevel::LOW,
+            format!(
+                ">>>>>>> Started iteration {} <<<<<<<",
+                self.current_iteration
+            )
+            .as_str(),
+        );
+
+        logger::LOG(
+            logger::VerbosityLevel::HIGH,
+            ">> Fitness calculation phase.",
+        );
         // Calculate fitness.
-        for gene in self.generation.iter_mut() {
+        for (i, gene) in self.generation.iter_mut().enumerate() {
             gene.calculate_fitness();
+            logger::LOG(
+                logger::VerbosityLevel::MID,
+                format!("Gene {i} = {:?}", gene.get_fitness()).as_str(),
+            );
         }
 
+        logger::LOG(logger::VerbosityLevel::HIGH, ">> Selection phase.");
         // Selection.
         let mut new_generation: Vec<T> = Vec::with_capacity(self.population_size);
         let num_survivors: usize = (self.generation.len() as f32 * self.selection_rate) as usize;
         let mut new_genes_num: usize = 0;
 
+        logger::LOG(
+            logger::VerbosityLevel::MID,
+            format!("Number of survivors = {:?}", num_survivors).as_str(),
+        );
         while new_genes_num < num_survivors {
             let gene_idx: usize = self.selection_algorithm.select(
                 &self
@@ -176,6 +224,7 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
             new_genes_num += 1;
         }
 
+        logger::LOG(logger::VerbosityLevel::HIGH, ">> Crossover phase.");
         // Crossover
         let mut rng = rand::thread_rng();
         while new_genes_num < self.population_size {
@@ -188,14 +237,30 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
             let crossover_gen = gen1.crossover(&new_generation[gen2_idx]);
             new_generation.push(crossover_gen);
             new_genes_num += 1;
+            logger::LOG(
+                logger::VerbosityLevel::MID,
+                format!(
+                    "Crossover between gen1({:?}) and gen2({:?})",
+                    gen1.get_fitness(),
+                    new_generation[gen2_idx].get_fitness()
+                )
+                .as_str(),
+            );
         }
 
+        logger::LOG(logger::VerbosityLevel::HIGH, ">> Mutation phase.");
         // Mutation
+        let mut num_of_mutations = 0;
         for gen in new_generation.iter_mut() {
             if rng.gen_range(0.0..1.0) < self.mutation_rate {
                 gen.mutate();
+                num_of_mutations += 1;
             }
         }
+        logger::LOG(
+            logger::VerbosityLevel::MID,
+            format!("{} mutations performed.", num_of_mutations).as_str(),
+        );
 
         // Save generation_historic & best_gene
         self.generation = new_generation;
@@ -211,17 +276,21 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
     /// Saves the generation just created and the best gene.
     fn save_generation(&mut self) {
+        logger::LOG(logger::VerbosityLevel::HIGH, ">> Saving generation data.");
         self.generation_historic.push(Vec::clone(&self.generation));
 
         let mut best_fitness: f64 = self.best_gene.get_fitness();
 
-        // FIXME: Not use clone, since it is expensive?
         for gene in self.generation.iter() {
             if gene.get_fitness() > best_fitness {
                 self.best_gene = *gene;
                 best_fitness = gene.get_fitness();
             }
         }
+        logger::LOG(
+            logger::VerbosityLevel::LOW,
+            format!("Best gene with fitness = {:?}", best_fitness).as_str(),
+        );
     }
 
     /// Checks if the algorithm should stop or not.
@@ -229,11 +298,19 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
         if self.best_gene.get_fitness() >= self.fitness_goal {
             self.running = false;
             self.stop_criteria = StopCriteria::FitnessAchieved;
+            logger::LOG(
+                logger::VerbosityLevel::LOW,
+                format!("Algorithm must stop because of {:?}", self.stop_criteria).as_str(),
+            );
         }
 
         if self.current_iteration >= self.iterations {
             self.running = false;
             self.stop_criteria = StopCriteria::MaxIterations;
+            logger::LOG(
+                logger::VerbosityLevel::LOW,
+                format!("Algorithm must stop because of {:?}", self.stop_criteria).as_str(),
+            );
         }
     }
 
@@ -353,8 +430,27 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     }
 }
 
+/// Default trait implementation for GeneticAlgorithm.
 impl<T: Gene + Copy> Default for GeneticAlgorithm<T> {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+/// Display trait implementation for GeneticAlgorithm.
+impl<T: Gene + Copy> fmt::Display for GeneticAlgorithm<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+             "{{\n\tpopulation_size: {},\n\titerations: {},\n\tcurrent_iteration: {},\n\tselection_rate: {},\n\tmutation_rate: {},\n\tfitness_goal: {:?},\n\tstop_criteria: {:?},\n\tbest_gene_fitness: {}\n}}",
+            self.population_size,
+            self.iterations,
+            self.current_iteration,
+            self.selection_rate,
+            self.mutation_rate,
+            self.fitness_goal,
+            self.stop_criteria,
+            self.best_gene.get_fitness()
+        )
     }
 }

@@ -24,6 +24,8 @@ pub trait Selection {
     fn select(&self, fitnesses: &Vec<f64>) -> usize;
 }
 
+/// Default selection algorithms supported.
+#[derive(Debug)]
 pub enum SelectionAlgorithms {
     Roulette,
     Tournament(usize),
@@ -74,7 +76,6 @@ impl Selection for SelectionAlgorithms {
                 }
             }
         }
-
         winner_idx
     }
 }

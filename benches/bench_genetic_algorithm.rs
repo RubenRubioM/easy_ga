@@ -3,7 +3,11 @@ pub mod benchmark {
     use criterion::{black_box, Criterion};
     use easy_ga::samples::MyGene as MockMyGene;
     use easy_ga::GeneticAlgorithm;
+    use easy_ga::LOG_verbosity;
+    use easy_ga::LOG_verbosity_type;
     use easy_ga::SelectionAlgorithms;
+    use easy_ga::VerbosityLevel;
+    use easy_ga::VerbosityType;
 
     /// Benchmark the GeneticAlgorithm::new function.
     pub fn new(c: &mut Criterion) {
@@ -157,6 +161,228 @@ pub mod benchmark {
                 },
             );
         }
+
+        group.finish();
+    }
+
+    /// Benchmarks the logger with VerbosityType::LOG.
+    pub fn logger_log_with_different_verbosity(c: &mut Criterion) {
+        let mut group = c.benchmark_group("Logger_LOG - VerbosityLevel::");
+        group.measurement_time(core::time::Duration::from_secs(10));
+
+        LOG_verbosity_type(VerbosityType::LOG);
+
+        LOG_verbosity(VerbosityLevel::DISABLED);
+        group.bench_function("DISABLED", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::LOW);
+        group.bench_function("LOW", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::MID);
+        group.bench_function("MID", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::HIGH);
+        group.bench_function("HIGH", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        group.finish();
+    }
+
+    /// Benchmarks the logger with VerbosityType::SAVE.
+    pub fn logger_save_with_different_verbosity(c: &mut Criterion) {
+        let mut group = c.benchmark_group("Logger_SAVE - VerbosityLevel::");
+        group.measurement_time(core::time::Duration::from_secs(10));
+
+        LOG_verbosity_type(VerbosityType::SAVE);
+
+        LOG_verbosity(VerbosityLevel::DISABLED);
+        group.bench_function("DISABLED", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::LOW);
+        group.bench_function("LOW", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::MID);
+        group.bench_function("MID", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::HIGH);
+        group.bench_function("HIGH", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        group.finish();
+    }
+
+    /// Benchmarks the logger with VerbosityType::SAVE.
+    pub fn logger_log_and_save_with_different_verbosity(c: &mut Criterion) {
+        let mut group = c.benchmark_group("Logger_LOG_AND_SAVE - VerbosityLevel::");
+        group.measurement_time(core::time::Duration::from_secs(10));
+
+        LOG_verbosity_type(VerbosityType::LOG_AND_SAVE);
+
+        LOG_verbosity(VerbosityLevel::DISABLED);
+        group.bench_function("DISABLED", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::LOW);
+        group.bench_function("LOW", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::MID);
+        group.bench_function("MID", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
+
+        LOG_verbosity(VerbosityLevel::HIGH);
+        group.bench_function("HIGH", |b| {
+            b.iter(|| {
+                GeneticAlgorithm::<MockMyGene>::new()
+                    .population_size(black_box(20))
+                    .iterations(black_box(100))
+                    .mutation_rate(black_box(0.05))
+                    .selection_rate(black_box(0.90))
+                    .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
+                    .fitness_goal(black_box(f64::MAX))
+                    .init()
+                    .unwrap()
+                    .run();
+            })
+        });
 
         group.finish();
     }

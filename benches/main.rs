@@ -21,6 +21,13 @@ criterion_group!(
 );
 
 criterion_group!(
+    logger,
+    bench_genetic_algorithm::benchmark::logger_log_with_different_verbosity,
+    bench_genetic_algorithm::benchmark::logger_save_with_different_verbosity,
+    bench_genetic_algorithm::benchmark::logger_log_and_save_with_different_verbosity,
+);
+
+criterion_group!(
     selection_algorithms,
     bench_selection::benchmark::roulette_different_sizes,
     bench_selection::benchmark::tournament_different_sizes,
@@ -32,5 +39,6 @@ criterion_main!(
     instantiation,
     run_without_fitness_goal,
     genetic_algorithm_functions,
-    selection_algorithms
+    logger,
+    selection_algorithms,
 );
