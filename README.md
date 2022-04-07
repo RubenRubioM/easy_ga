@@ -119,21 +119,25 @@ LOG_verbosity_type(VerbosityType::LOG_AND_SAVE); // VerbosityType::LOG by defaul
   - **SAVE**: Saves the logs into [target/tmp/](target/tmp/).
   - **SAVE_AND_LOG**: Both.
 
+---
+
 ## Benchmarking
 
 Benchmarking was added in the version `1.1.0` and you can run them donwloading the repository and running `cargo bench` from the command-line. The benchmarks are placed inside the [benches/](benches/) folder. 
+
+---
 
 ## Next steps
 
 This is a personal side project mainly for me so any further implementations will be done in my spare time as a good way to teach me more about Rust.
 
 - Multithreading
-- Add verbosity for debugging
+- Add verbosity for debugging ✅
 - More unit testing and system testing
 - New default `Selection` algorithms
 - CSV and JSON result export
 - Fix some quality of life problems with references and chain calling
-- Add benchmarks
+- Add benchmarks ✅
 
 ## License
 
