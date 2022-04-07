@@ -23,4 +23,5 @@ criterion = "0.3"
 
 [[bench]]
 name = "main"
+path = "benches/main.rs"
 harness = false
