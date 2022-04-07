@@ -5,12 +5,11 @@ edition = "2021"
 authors = ["RubenRubioM"]
 description = "Library to implement genetic algorithms"
 readme = "README.md"
-license = "MPL-2.0"
 license-file = "LICENSE.txt"
 repository = "https://github.com/RubenRubioM/easy_ga/"
 keywords = ["genetic", "genetics", "genetic-algorithm", "ai", "machine-learning"]
 categories = ["science"]
-exclude = ["main.rs"]
+exclude = ["main.rs", "benches/"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
