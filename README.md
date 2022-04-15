@@ -135,7 +135,7 @@ This is a personal side project mainly for me so any further implementations wil
 - Add verbosity for debugging ✅
 - More unit testing and system testing
 - New default `Selection` algorithms
-- CSV and JSON result export
+- CSV and JSON result export ✅
 - Fix some quality of life problems with references and chain calling
 - Add benchmarks ✅
 

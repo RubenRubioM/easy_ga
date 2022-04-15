@@ -3,7 +3,6 @@
 
 use core::fmt;
 use rand::Rng;
-use std::error::Error;
 
 use crate::logger;
 use crate::selection::*;
@@ -148,20 +147,21 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
 
     // TODO: Implement error handling when the algorithm will not be able to init.
     /// Initiate the algorithm.    
-    pub fn init(mut self) -> Result<Self, Box<dyn Error>> {
+    pub fn init(mut self) -> Self {
         self.running = true;
         self.save_generation();
         logger::LOG(
             logger::VerbosityLevel::HIGH,
             "Algorithm initiated properlly.",
         );
-        Ok(self)
+
+        self
     }
 
     /// Runs the algorithm by itself without user control.
-    pub fn run(mut self) -> (T, StopCriteria) {
+    pub fn run(&mut self) -> (T, StopCriteria) {
         if !self.is_running() {
-            self = self.init().unwrap();
+            panic!("GeneticAlgorithm not initializated. Call GeneticAlgorithm::init() before.");
         }
 
         logger::LOG(logger::VerbosityLevel::HIGH, "Algorithm run started.");
@@ -179,6 +179,10 @@ impl<T: Gene + Copy> GeneticAlgorithm<T> {
     ///
     /// `self.generation` - The new generation.
     pub fn next_iteration(&mut self) -> &Vec<T> {
+        if !self.is_running() {
+            panic!("GeneticAlgorithm not initializated. Call GeneticAlgorithm::init() before.");
+        }
+        
         logger::LOG(
             logger::VerbosityLevel::LOW,
             format!(

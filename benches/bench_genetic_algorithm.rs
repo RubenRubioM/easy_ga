@@ -155,7 +155,6 @@ pub mod benchmark {
                             )))
                             .fitness_goal(black_box(f64::MAX))
                             .init()
-                            .unwrap()
                             .run();
                     })
                 },
@@ -183,7 +182,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -199,7 +197,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -215,7 +212,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -231,7 +227,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -257,7 +252,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -273,7 +267,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -289,7 +282,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -305,7 +297,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -331,7 +322,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -347,7 +337,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -363,7 +352,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
@@ -379,7 +367,6 @@ pub mod benchmark {
                     .selection_algorithm(Box::new(SelectionAlgorithms::Tournament(black_box(2))))
                     .fitness_goal(black_box(f64::MAX))
                     .init()
-                    .unwrap()
                     .run();
             })
         });
