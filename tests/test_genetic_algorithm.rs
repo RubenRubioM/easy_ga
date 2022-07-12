@@ -170,10 +170,22 @@ mod genetic_algorithm {
 
     #[test]
     fn WhenRunWithDifferentSelectionAlgorithm_ThenSuccess() {
+        // Test Roulette
         let iterations = 10;
         let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
             .iterations(iterations)
             .selection_algorithm(Box::new(SelectionAlgorithms::Roulette))
+            .init()
+            .unwrap();
+
+        let (_, stopCriteria) = genetic_algorithm.run();
+        assert_eq!(stopCriteria, StopCriteria::MaxIterations);
+
+        // Test Random
+        let iterations = 10;
+        let genetic_algorithm = GeneticAlgorithm::<MockMyGene>::new()
+            .iterations(iterations)
+            .selection_algorithm(Box::new(SelectionAlgorithms::Random))
             .init()
             .unwrap();
 

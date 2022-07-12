@@ -25,10 +25,11 @@ pub trait Selection {
 }
 
 /// Default selection algorithms supported.
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum SelectionAlgorithms {
     Roulette,
     Tournament(usize),
+    Random,
 }
 
 impl Selection for SelectionAlgorithms {
@@ -73,6 +74,12 @@ impl Selection for SelectionAlgorithms {
                         best_fitness = fitnesses[idx];
                         winner_idx = idx;
                     }
+                }
+            }
+
+            SelectionAlgorithms::Random => {
+                if fitnesses.len() > 0 {
+                    winner_idx = rng.gen_range(0..fitnesses.len());
                 }
             }
         }

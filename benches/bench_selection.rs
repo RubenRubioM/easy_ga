@@ -3,51 +3,94 @@ pub mod benchmark {
     use easy_ga::selection::*;
     use rand::Rng;
 
+    fn generate_fitnesses(length: usize) -> Vec<f64> {
+        let mut rng = rand::thread_rng();
+        let mut fitnesses: Vec<f64> = Vec::with_capacity(length);
+        for i in 0..fitnesses.capacity() {
+            fitnesses.insert(i, rng.gen());
+        }
+        fitnesses
+    }
+
     /// Benchmarks the SelectionAlgorithms::Roulette with different sizes.
     pub fn roulette_different_sizes(c: &mut Criterion) {
         let selection_algorithm = SelectionAlgorithms::Roulette;
         let mut group = c.benchmark_group("SelectionAlgorithms::Roulette");
-        let mut rng = rand::thread_rng();
-        let mut fitnesses_50: Vec<f64> = Vec::with_capacity(50);
-        fitnesses_50.fill_with(|| rng.gen());
+        let mut fitnesses: Vec<f64> = generate_fitnesses(50);
 
         group.bench_function("SelectionAlgorithms::Roulette - size/50", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_50);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
-        let mut fitnesses_100: Vec<f64> = Vec::with_capacity(100);
-        fitnesses_100.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(100);
         group.bench_function("SelectionAlgorithms::Roulette - size/100", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_100);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
-        let mut fitnesses_250: Vec<f64> = Vec::with_capacity(250);
-        fitnesses_250.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(250);
         group.bench_function("SelectionAlgorithms::Roulette - size/250", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_250);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
-        let mut fitnesses_500: Vec<f64> = Vec::with_capacity(500);
-        fitnesses_500.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(500);
         group.bench_function("SelectionAlgorithms::Roulette - size/500", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+    }
+
+    /// Benchmarks the SelectionAlgorithms::Random with different sizes.
+    pub fn random_different_sizes(c: &mut Criterion) {
+        let selection_algorithm = SelectionAlgorithms::Random;
+        let mut group = c.benchmark_group("SelectionAlgorithms::Random");
+        let mut fitnesses: Vec<f64> = generate_fitnesses(50);
+
+        group.bench_function("SelectionAlgorithms::Random - size/50", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(100);
+        group.bench_function("SelectionAlgorithms::Random - size/100", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(250);
+        group.bench_function("SelectionAlgorithms::Random - size/250", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(500);
+        group.bench_function("SelectionAlgorithms::Random - size/500", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -57,50 +100,42 @@ pub mod benchmark {
     pub fn tournament_different_sizes(c: &mut Criterion) {
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
         let mut group = c.benchmark_group("SelectionAlgorithms::Tournament");
-        let mut rng = rand::thread_rng();
-        let mut fitnesses_50: Vec<f64> = Vec::with_capacity(50);
-        fitnesses_50.fill_with(|| rng.gen());
+        let mut fitnesses: Vec<f64> = generate_fitnesses(50);
 
         group.bench_function("SelectionAlgorithms::Tournament - size/50", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_50);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
-        let mut fitnesses_100: Vec<f64> = Vec::with_capacity(100);
-        fitnesses_100.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(100);
         group.bench_function("SelectionAlgorithms::Tournament - size/100", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_100);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
-        let mut fitnesses_250: Vec<f64> = Vec::with_capacity(250);
-        fitnesses_250.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(250);
         group.bench_function("SelectionAlgorithms::Tournament - size/250", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_250);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
 
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
-        let mut fitnesses_500: Vec<f64> = Vec::with_capacity(500);
-        fitnesses_500.fill_with(|| rng.gen());
-
+        fitnesses = generate_fitnesses(500);
         group.bench_function("SelectionAlgorithms::Tournament - size/500", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -110,14 +145,12 @@ pub mod benchmark {
     pub fn tournament_different_tournament_participant(c: &mut Criterion) {
         let selection_algorithm = SelectionAlgorithms::Tournament(2);
         let mut group = c.benchmark_group("SelectionAlgorithms::Tournament");
-        let mut rng = rand::thread_rng();
-        let mut fitnesses_500: Vec<f64> = Vec::with_capacity(500);
-        fitnesses_500.fill_with(|| rng.gen());
+        let fitnesses: Vec<f64> = generate_fitnesses(500);
 
         group.bench_function("SelectionAlgorithms::Tournament(2)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -127,7 +160,7 @@ pub mod benchmark {
         group.bench_function("SelectionAlgorithms::Tournament(10)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -137,7 +170,7 @@ pub mod benchmark {
         group.bench_function("SelectionAlgorithms::Tournament(50)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -147,7 +180,7 @@ pub mod benchmark {
         group.bench_function("SelectionAlgorithms::Tournament(100)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -157,7 +190,7 @@ pub mod benchmark {
         group.bench_function("SelectionAlgorithms::Tournament(250)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
@@ -167,7 +200,7 @@ pub mod benchmark {
         group.bench_function("SelectionAlgorithms::Tournament(500)", |b| {
             b.iter(|| {
                 for _ in 0..100000 {
-                    selection_algorithm.select(&fitnesses_500);
+                    selection_algorithm.select(&fitnesses);
                 }
             })
         });
