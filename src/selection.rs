@@ -30,6 +30,7 @@ pub enum SelectionAlgorithms {
     Roulette,
     Tournament(usize),
     Random,
+    Stochastic,
 }
 
 impl Selection for SelectionAlgorithms {
@@ -78,8 +79,25 @@ impl Selection for SelectionAlgorithms {
             }
 
             SelectionAlgorithms::Random => {
-                if fitnesses.len() > 0 {
-                    winner_idx = rng.gen_range(0..fitnesses.len());
+                return rng.gen_range(0..fitnesses.len());
+            }
+
+            SelectionAlgorithms::Stochastic => {
+                let mean: f64 = fitnesses.iter().sum::<f64>() / fitnesses.len() as f64;
+                let random_number: f64 = rng.gen_range(0.0..=1.0);
+                let delta: f64 = mean * random_number;
+                let mut sum: f64 = fitnesses[0]; 
+                let mut j: usize = 0;
+                let mut i: usize = 0;
+
+                loop {
+                    if delta < sum {
+                        return i;
+                    } else {
+                        j += 1;
+                        sum += fitnesses[j];
+                    }
+                    i += 1;
                 }
             }
         }

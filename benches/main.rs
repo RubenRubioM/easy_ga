@@ -31,6 +31,7 @@ criterion_group!(
     selection_algorithms,
     bench_selection::benchmark::roulette_different_sizes,
     bench_selection::benchmark::random_different_sizes,
+    bench_selection::benchmark::stochastic_different_sizes,
     bench_selection::benchmark::tournament_different_sizes,
     bench_selection::benchmark::tournament_different_tournament_participant,
     bench_selection::benchmark::roulette_vs_tournament,

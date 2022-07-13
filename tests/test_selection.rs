@@ -9,9 +9,7 @@ mod selection {
     #[test]
     /// Tests the Selection::Select with SelectionAlgorithm::Roulette
     fn WhenSelectionWithRoulette_ThenSuccess() {
-        // Fitness length = 0
         let selection_algorithm = SelectionAlgorithms::Roulette;
-        selection_algorithm.select(&generate_fitnesses(0));
         // Fitness length = 1
         selection_algorithm.select(&generate_fitnesses(1));
         // Fitness length = 2
@@ -23,9 +21,6 @@ mod selection {
     #[test]
     /// Tests the Selection::Select with SelectionAlgorithm::Roulette
     fn WhenSelectionWithTournament_ThenSuccess() {
-        // Fitness length = 0
-        let selection_algorithm = SelectionAlgorithms::Tournament(0);
-        selection_algorithm.select(&generate_fitnesses(0));
         // Fitness length = 1
         let selection_algorithm = SelectionAlgorithms::Tournament(1);
         selection_algorithm.select(&generate_fitnesses(1));
@@ -40,9 +35,19 @@ mod selection {
     #[test]
     /// Tests the Selection::Select with SelectionAlgorithm::Random
     fn WhenSelectionWithRandom_ThenSuccess() {
-        // Fitness length = 0
         let selection_algorithm = SelectionAlgorithms::Random;
-        selection_algorithm.select(&generate_fitnesses(0));
+        // Fitness length = 1
+        selection_algorithm.select(&generate_fitnesses(1));
+        // Fitness length = 2
+        selection_algorithm.select(&generate_fitnesses(2));
+        // Fitness length = 100
+        selection_algorithm.select(&generate_fitnesses(100));
+    }
+
+    #[test]
+    /// Tests the Selection::Select with SelectionAlgorithm::Stochastic
+    fn WhenSelectionWithStochastic_ThenSuccess() {
+        let selection_algorithm = SelectionAlgorithms::Stochastic;
         // Fitness length = 1
         selection_algorithm.select(&generate_fitnesses(1));
         // Fitness length = 2

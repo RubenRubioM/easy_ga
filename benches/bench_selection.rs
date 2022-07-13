@@ -96,6 +96,48 @@ pub mod benchmark {
         });
     }
 
+    /// Benchmarks the SelectionAlgorithms::Stochastic with different sizes.
+    pub fn stochastic_different_sizes(c: &mut Criterion) {
+        let selection_algorithm = SelectionAlgorithms::Stochastic;
+        let mut group = c.benchmark_group("SelectionAlgorithms::Stochastic");
+        let mut fitnesses: Vec<f64> = generate_fitnesses(50);
+
+        group.bench_function("SelectionAlgorithms::Stochastic - size/50", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(100);
+        group.bench_function("SelectionAlgorithms::Stochastic - size/100", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(250);
+        group.bench_function("SelectionAlgorithms::Stochastic - size/250", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+
+        fitnesses = generate_fitnesses(500);
+        group.bench_function("SelectionAlgorithms::Stochastic - size/500", |b| {
+            b.iter(|| {
+                for _ in 0..100000 {
+                    selection_algorithm.select(&fitnesses);
+                }
+            })
+        });
+    }
+
     /// Benchmarks the SelectionAlgorithms::Tournament with different sizes.
     pub fn tournament_different_sizes(c: &mut Criterion) {
         let selection_algorithm = SelectionAlgorithms::Tournament(10);
