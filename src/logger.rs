@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 static mut LEVEL: VerbosityLevel = VerbosityLevel::DISABLED;
 static mut TYPE: VerbosityType = VerbosityType::LOG_AND_SAVE;
-const PATH: &str = "target/tmp/";
+const PATH: &str = "target/easy_ga/logs/";
 
 lazy_static! {
     static ref UUID: String = Uuid::new_v4().to_string();

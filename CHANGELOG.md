@@ -4,6 +4,7 @@
 * Added new `SelectionAlgorithm::Stochastic`.
 * `SelectionAlgorithm` now derive `PartialEq`, `Eq`, `PartialOrd` and `Ord`.
 * Added unit testing for `Selection` trait.
+* Logs are now saved inside `target/easy_ga/logs` insted of `target/tmp/`
 
 # [1.1.0]
 

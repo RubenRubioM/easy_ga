@@ -10,6 +10,8 @@ All the changes will be updated in the [CHANGELOG.md](CHANGELOG.md)
 - `trait Selection`: Definition for your custom selection algorithms.
     * `Roulette`: Selection algorithm already implemented.
     * `Tournament`: Selection algorithm implementation with `n` members on it.
+    * `Random`: Selection algorithm already implemented.
+    * `Stochastic`: Selection algorithm already implemented.
 - `GeneticAlgorithm`: The main class to wrap the business logic in the genetic algorithm execution.
 
 ## Usage
@@ -116,7 +118,7 @@ LOG_verbosity_type(VerbosityType::LOG_AND_SAVE); // VerbosityType::LOG by defaul
 
 - **VerbosityType:**
   - **LOG**: Only terminal logs.
-  - **SAVE**: Saves the logs into [target/tmp/](target/tmp/).
+  - **SAVE**: Saves the logs into [target/tmp/](target/easy_ga/logs/).
   - **SAVE_AND_LOG**: Both.
 
 ---
