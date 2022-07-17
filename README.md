@@ -118,7 +118,7 @@ LOG_verbosity_type(VerbosityType::LOG_AND_SAVE); // VerbosityType::LOG by defaul
 
 - **VerbosityType:**
   - **LOG**: Only terminal logs.
-  - **SAVE**: Saves the logs into [target/tmp/](target/easy_ga/logs/).
+  - **SAVE**: Saves the logs into [target/easy_ga/logs/](target/easy_ga/logs/).
   - **SAVE_AND_LOG**: Both.
 
 ---
