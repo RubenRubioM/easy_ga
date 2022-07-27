@@ -1,5 +1,6 @@
 # Easy_GA
 [![Current Crates.io Version](https://img.shields.io/crates/v/easy_ga.svg)](https://crates.io/crates/easy_ga)
+[![Rust CI](https://github.com/RubenRubioM/easy_ga/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/RubenRubioM/easy_ga/actions/workflows/rust.yml)
 
 Easy_GA is a genetic algorithm library made for Rust projects. It provides full customization for your own genotypes definitions and a geneticAlgorithm implementation to wrap all the common logic within a genetic algorithm.
 
