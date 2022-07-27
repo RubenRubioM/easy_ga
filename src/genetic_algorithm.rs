@@ -1,6 +1,8 @@
 //! This module contains the definition and implementation of the GeneticAlgorithm class
 //! wich is the handler for our `Gene` to do the logic.
 
+#![allow(clippy::manual_range_contains)]
+
 use core::fmt;
 use rand::Rng;
 use std::error::Error;

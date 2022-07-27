@@ -1,5 +1,7 @@
 //! This module define the trait and implementation of selection algorithms
 
+#![allow(clippy::ptr_arg)]
+
 use rand::distributions::Standard;
 use rand::Rng;
 use std::cmp;
@@ -86,7 +88,7 @@ impl Selection for SelectionAlgorithms {
                 let mean: f64 = fitnesses.iter().sum::<f64>() / fitnesses.len() as f64;
                 let random_number: f64 = rng.gen_range(0.0..=1.0);
                 let delta: f64 = mean * random_number;
-                let mut sum: f64 = fitnesses[0]; 
+                let mut sum: f64 = fitnesses[0];
                 let mut j: usize = 0;
                 let mut i: usize = 0;
 
